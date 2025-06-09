@@ -1,0 +1,58 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    # 1 — checkout code
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # 2 — set up JDK 21
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '21'
+
+    # 3 — download Android SDK + platforms;tools;build-tools
+    - name: Install Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        cmdline-tools-version: latest
+        packages: |
+          platform-tools
+          platforms;android-35
+          build-tools;35.0.0
+          emulator
+          patcher;v4
+
+    # 4 — cache Gradle (speed up subsequent runs)
+    - name: Cache Gradle
+      uses: gradle/gradle-build-action@v3
+
+    # 5 — build, lint, unit-test
+    - name: Assemble Debug & Run Unit Tests
+      run: ./gradlew lintDebug testDebugUnitTest assembleDebug
+
+    # 6 — assemble Release AAB + universal APK
+    - name: Assemble Release artifacts
+      run: ./gradlew :app:bundleRelease :app:assembleUniversalRelease
+
+    # 7 — upload artifacts so you can download them
+    - name: Upload build outputs
+      uses: actions/upload-artifact@v4
+      with:
+        name: secuedge-build
+        path: |
+          app/build/outputs/**/*.aab
+          app/build/outputs/**/*.apk
