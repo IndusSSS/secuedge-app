@@ -1,14 +1,14 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.secuedge.edgeai"
-    compileSdk = 34
-    defaultConfig { minSdk = 33 }
+    namespace = "com.smartsecurity.secuedge.edgeai"
+    compileSdk = 35
+    defaultConfig { minSdk = 29 }
 }
 
 dependencies {
-    implementation("org.tensorflow:tflite-task-vision:0.5.4")
+    // TODO: LiteRT dependencies
 }

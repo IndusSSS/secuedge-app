@@ -1,17 +1,14 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
-    kotlin("kapt")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.secuedge.data"
-    compileSdk = 34
-    defaultConfig { minSdk = 33 }
+    namespace = "com.smartsecurity.secuedge.data"
+    compileSdk = 35
+    defaultConfig { minSdk = 29 }
 }
 
 dependencies {
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    // TODO: Room and coroutine dependencies
 }

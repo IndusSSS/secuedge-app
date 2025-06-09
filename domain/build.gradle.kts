@@ -1,14 +1,14 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.secuedge.domain"
-    compileSdk = 34
-    defaultConfig { minSdk = 33 }
+    namespace = "com.smartsecurity.secuedge.domain"
+    compileSdk = 35
+    defaultConfig { minSdk = 29 }
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    // TODO: domain module dependencies
 }

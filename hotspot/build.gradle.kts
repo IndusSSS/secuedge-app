@@ -1,14 +1,14 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.secuedge.hotspot"
-    compileSdk = 34
-    defaultConfig { minSdk = 33 }
+    namespace = "com.smartsecurity.secuedge.hotspot"
+    compileSdk = 35
+    defaultConfig { minSdk = 29 }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
+    // TODO: hotspot module dependencies
 }
