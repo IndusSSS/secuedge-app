@@ -3,56 +3,44 @@ name: Android CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
-    name: Build & Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest        # 1) Use a clean Ubuntu VM
     timeout-minutes: 60
 
     steps:
-    # 1 — checkout code
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4    # 2) Clone YOUR repo at the pushed commit
 
-    # 2 — set up JDK 21
     - name: Set up JDK
-      uses: actions/setup-java@v4
-      with:
-        distribution: temurin
-        java-version: '21'
+      uses: actions/setup-java@v4  # 3) Ensure Java 21 is on the PATH
 
-    # 3 — download Android SDK + platforms;tools;build-tools
     - name: Install Android SDK
       uses: android-actions/setup-android@v3
       with:
         cmdline-tools-version: latest
-        packages: |
-          platform-tools
-          platforms;android-35
-          build-tools;35.0.0
-          emulator
-          patcher;v4
+        packages:                  # 4) Pull down exactly the SDK components you need
+          - platform-tools
+          - platforms;android-35
+          - build-tools;35.0.0
 
-    # 4 — cache Gradle (speed up subsequent runs)
     - name: Cache Gradle
       uses: gradle/gradle-build-action@v3
+      # 5) Cache ~/.gradle between runs to speed up downloads
 
-    # 5 — build, lint, unit-test
     - name: Assemble Debug & Run Unit Tests
       run: ./gradlew lintDebug testDebugUnitTest assembleDebug
+      # 6) Run lint, unit tests, and produce a debug APK
 
-    # 6 — assemble Release AAB + universal APK
     - name: Assemble Release artifacts
       run: ./gradlew :app:bundleRelease :app:assembleUniversalRelease
+      # 7) Produce a signed AAB and a universal-release APK (unsigned by default)
 
-    # 7 — upload artifacts so you can download them
     - name: Upload build outputs
       uses: actions/upload-artifact@v4
       with:
-        name: secuedge-build
+        name: secuedge-build       # 8) Make the APK/AAB downloadable
         path: |
           app/build/outputs/**/*.aab
           app/build/outputs/**/*.apk
